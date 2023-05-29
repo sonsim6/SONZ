@@ -1,0 +1,645 @@
+var deliveryCostObj = 0;
+var packagingCostObj = 0;
+
+$('[delivery_change_cost]').click(function() {
+	$('[delivery_change_cost]').removeClass("active");
+	$(this).addClass("active");
+	if(($(this).attr("delivery_change_cost") == 0||($(this).attr("delivery_change_variable") == 'Доставка почтой России')||($(this).attr("delivery_change_variable") == 'Доставка почтой России до двери')||($(this).attr("delivery_change_variable") == 'Доставка СДЭК до двери')||($(this).attr("delivery_change_variable") == 'Доставка СДЭК в ближайший пункт выдачи заказа'))) {
+		$('.delivery-price-check-wrap').removeClass("active");
+		deliveryCostObj = Number($(this).attr("delivery_change_cost"));
+		getPriceGoodsInCart();
+
+		if($(this).attr("delivery_change_variable") == 'Доставка почтой России') {
+			$('.delivery-price-check').text(deliveryCostObj + ' ₽');
+			$('.delivery-price-check-wrap').addClass("active");
+		}
+		if($(this).attr("delivery_change_variable") == 'Доставка почтой России до двери') {
+			$('.delivery-price-check').text(deliveryCostObj + ' ₽');
+			$('.delivery-price-check-wrap').addClass("active");
+		}
+		if($(this).attr("delivery_change_variable") == 'Доставка СДЭК до двери') {
+			$('.delivery-price-check').text(deliveryCostObj + ' ₽');
+			$('.delivery-price-check-wrap').addClass("active");
+		}
+		if($(this).attr("delivery_change_variable") == 'Доставка СДЭК в ближайший пункт выдачи заказа') {
+			$('.delivery-price-check').text(deliveryCostObj + ' ₽');
+			$('.delivery-price-check-wrap').addClass("active");
+		}
+	} else {
+
+		var valueItemInCart = 0;
+		var weightGoods = 0;
+		$('.item-cart-value-good-src').each(function(i) {
+			 valueItemInCart += Number($(this).text());
+			 weightGoods += Number($(this).attr("weightG")) * Number($(this).text());
+		});
+
+		if(weightGoods < 251) {
+			deliveryCostObj = 700;
+		}
+
+		if(weightGoods > 251) {
+			deliveryCostObj = 1010;
+		}
+
+		if(weightGoods > 799) {
+			deliveryCostObj = 1760;
+		}
+
+		if(weightGoods > 1000) {
+			deliveryCostObj = 3100;
+		}
+
+		if(weightGoods > 2000) {
+			deliveryCostObj = 3900;
+		}
+
+		if(weightGoods > 3000) {
+			deliveryCostObj = 4000;
+		}
+
+		if(weightGoods > 4000) {
+			deliveryCostObj = 4320;
+		}
+
+		if(weightGoods > 5000) {
+			deliveryCostObj = 5000;
+		}
+
+		if(weightGoods > 6000) {
+			deliveryCostObj = 5500;
+		}
+
+		console.log(weightGoods);
+
+		$('.delivery-price-check').text(deliveryCostObj + ' ₽');
+		$('.delivery-price-check-wrap').addClass("active");
+
+		getPriceGoodsInCart();
+	}
+});
+
+function changeButtonEndCheckoutDelivery(statusChange) {
+	if(statusChange == 'onlinePayment') {
+		$('.end_checkout_delivery').addClass("with_online_payment");
+		$('.end_checkout_delivery').text("Оплатить");
+	} else {
+		$('.end_checkout_delivery').removeClass("with_online_payment");
+		$('.end_checkout_delivery').text("Оформить заказ");
+	}
+}
+
+$('body').on('click', '[buttonOpenBlockPayment]', function() {
+	$('[buttonOpenBlockPayment]').removeClass("active");
+	$(this).addClass("active");
+	$('[openBlockPayment]').hide();
+	$('[openBlockPayment = "'+ $(this).attr("buttonOpenBlockPayment") +'"]').show();
+});
+
+$('body').on('click', '[buttonopenblockpayment="payment-method-courier"]', function() {
+	changeButtonEndCheckoutDelivery('offlinePayment');
+});
+
+$('body').on('click', '[buttonopenblockpayment="payment-method-on-site"]', function() {
+	changeButtonEndCheckoutDelivery('onlinePayment');
+});
+
+//Переключение метода получения
+$('body').on('click', '[buttonOpenBlockMethodTake="courier"]', function() {
+	$('[buttonOpenBlockMethodTake]').removeClass("active");
+	$(this).addClass("active");
+	$('[OpenBlockDetailDelivery = "without-show-point-delivery"]').hide();
+	$('[OpenBlockDetailDelivery = "without-show"]').show();
+	$('[openBlockPayment = "payment-method-on-site"]').show();
+
+	changeButtonEndCheckoutDelivery('onlinePayment');
+});
+
+$('body').on('click', '[buttonOpenBlockMethodTake="point-delivery"]', function() {
+	$('[buttonOpenBlockMethodTake]').removeClass("active");
+	$(this).addClass("active");
+	$('[OpenBlockDetailDelivery = "without-show"]').hide();
+	$('[openBlockPayment = "payment-method-on-site"]').hide();
+	$('[OpenBlockDetailDelivery = "without-show-point-delivery"]').show();
+
+	changeButtonEndCheckoutDelivery('offlinePayment');
+});
+
+//Переключение с примеркой и без примерки
+$('body').on('click', '[buttonOpenBlockDetailDelivery]', function() {
+	$('[buttonOpenBlockDetailDelivery]').removeClass("active");
+	$(this).addClass("active");
+	$('[OpenBlockDetailDelivery]').hide();
+	$('[OpenBlockDetailDelivery = "'+ $(this).attr("buttonOpenBlockDetailDelivery") +'"]').show();
+
+	if($(this).hasClass("without-show")) {
+		$('[OpenBlockChangeMethodPayment = courier-variant]').hide();
+		$('[openBlockPayment = payment-method-courier]').hide();
+		$('[OpenBlockChangeMethodPayment = change-double-variant]').show();
+		$('[openBlockPayment = payment-method-on-site]').show();
+		$('[buttonopenblockpayment="payment-method-on-site"]').click();
+
+		changeButtonEndCheckoutDelivery('onlinePayment');
+	}
+
+	if($(this).hasClass("with-show")) {
+		$('[OpenBlockChangeMethodPayment = change-double-variant]').hide();
+		$('[openBlockPayment = payment-method-on-site]').hide();
+		$('[OpenBlockChangeMethodPayment = courier-variant]').show();
+		$('[openBlockPayment = payment-method-courier]').show();
+
+		changeButtonEndCheckoutDelivery('offlinePayment');
+	}
+});
+
+//Изменение отображения цены доставки при клике на кнопках
+
+function changeDelivetyCost(cost) {
+
+	if((cost == 'Не учтено')||(cost == 0)) {
+		$('.delivery-price-check').text('Не учтено');
+		$('.price-total-value').text((Number(sessionPriceGoodsCart) + Number(cost)).toLocaleString('ru') + ' ₽');
+		deliveryCostObj = cost;
+	} else {
+		$('.delivery-price-check').text(cost  + ' ₽');
+		$('.price-total-value').text((Number(sessionPriceGoodsCart) + Number(cost) + Number(cost)).toLocaleString('ru') + ' ₽');
+		deliveryCostObj = cost;
+	}
+}
+
+//Изменение цены упаковки
+$('[costpackaging]').click(function() {
+	packagingCostObj = Number($(this).attr("costpackaging"));
+	getPriceGoodsInCart();
+});
+
+$('body').on('click', '[changeDelivetyCost]', function() {
+	changeDelivetyCost($(this).attr("changeDelivetyCost"));
+});
+
+$('body').on('click', '.cheackbox-method-payment', function() {
+	$('.cheackbox-method-payment').removeClass("active");
+	$(this).addClass("active");
+});
+
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    return pattern.test(emailAddress);
+}
+
+function isValidPhone(phone) {
+	var pattern = new RegExp(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/i);
+    return pattern.test(phone);
+}
+
+function test_lat_end_step(str) {
+	let match = /[^A-Za-z]/ig.test(str);
+	return match;
+}
+
+	$('.input-info-shop').click(function() {
+		$(this).attr("style", "");
+	})
+
+	$('.end_checkout_pickup').click(function() {
+
+		var controller_step = 1;
+		var packagingCost = packagingCostObj;
+		var delivery_variable;
+		var chosenpostid = $('#chosenPostIdCdek').val();
+
+		$('#body-site').find('.required').each(function() {
+			jQuery(this).css("box-shadow", "");
+			if (jQuery(this).val() == '') {
+				jQuery(this).css("border-color", "#ea001b");
+				controller_step = controller_step + 1;
+			}
+		});
+
+		if($('.change-country').text() != 'RUSSIA (РОССИЯ)') {
+			if(test_lat_end_step($('[name="Улица"]').val()) == true) {
+				controller_step = controller_step + 1;
+				$('[name="Улица"]').css("border-color", "#ea001b");
+				$('html,body').stop().animate({ scrollTop: $('[name="Улица"]').offset().top - 60 }, 500);
+			}
+
+			if(test_lat_end_step($('[name="Город"]').val()) == true) {
+				controller_step = controller_step + 1;
+				$('[name="Город"]').css("border-color", "#ea001b");
+				$('html,body').stop().animate({ scrollTop: $('[name="Город"]').offset().top - 60 }, 500);
+			}
+
+			if(test_lat_end_step($('[name="Фамилия"]').val()) == true) {
+				controller_step = controller_step + 1;
+				$('[name="Фамилия"]').css("border-color", "#ea001b");
+				$('html,body').stop().animate({ scrollTop: $('[name="Фамилия"]').offset().top - 60 }, 500);
+			}
+
+			if(test_lat_end_step($('[name="Имя"]').val()) == true) {
+				controller_step = controller_step + 1;
+				$('[name="Имя"]').css("border-color", "#ea001b");
+				$('html,body').stop().animate({ scrollTop: $('[name="Имя"]').offset().top - 60 }, 500);
+			}
+		}
+
+		var country = $('.change-country').text();
+
+		var emailV = $('#body-site').parent().find('[name="Email"]');
+		if(!isValidEmailAddress(emailV.val())) {
+			controller_step = controller_step + 1;
+			emailV.css("border-color", "#ea001b");
+		}
+
+		var emptyDelivery = false;
+
+		$('.wrap-delivery-variable__radio-box').each(function() {
+			if($(this).hasClass("active")) {
+				delivery_variable = $(this).attr("delivery_change_variable");
+				emptyDelivery = true;
+			}
+		});
+
+		if(!emptyDelivery) {
+			alert('Для оформления заказа, необходимо выбрать вариант доставки');
+			controller_step = controller_step + 1;
+		}
+
+		$('#body-site').find('.required').each(function() {
+			if (jQuery(this).val() == '') {
+				$('html,body').stop().animate({ scrollTop: jQuery(this).offset().top - 60 }, 500);
+				return false;
+			}
+		});
+
+		if($('.wrap-delivery-variable__radio-box.active').attr("delivery_change_variable") == 'Доставка СДЭК в ближайший пункт выдачи заказа') {
+			if($('#chosenPostIdCdek').val() == '') {
+				alert('Для оформления заказа, необходимо выбрать пункт выдачи CDEK');
+				controller_step = controller_step + 1;
+			}
+		}
+
+		//Проверка политики
+		/*if($(this).parent().find('.cheackbox-offer').hasClass("active")) {
+
+		} else {
+			alert('Для оформления заказа, согласитесь с условиями оферты');
+			controller_step = controller_step + 1;
+		}*/
+
+		if(deliveryCostObj < 100) {
+			alert('Ошибка с выбором варианта доставки, попробуйте выбрать другой');
+			controller_step = controller_step + 1;
+		}
+
+		if($('.change-country').text() != 'RUSSIA (РОССИЯ)') {
+			if($('.wrap-delivery-variable__radio-box.active').attr("delivery_change_variable") != "Международная доставка") {
+				alert('Ошибка с выбором варианта доставки, попробуйте перезагрузить страницу');
+				controller_step = controller_step + 1;
+			}
+		}
+
+		if(controller_step == '1') {
+			$('.end_checkout_pickup').addClass("pointer-event-none-element");
+
+			$.ajax({
+				type: 'POST',
+				data: ({data_form:$('#body-site').find('.form-serialize').serializeArray(), country:country, packagingCost:packagingCost, delivery_cost_obj:deliveryCostObj, delivery_variable:delivery_variable, chosenpostid:chosenpostid}),
+				url: "/include/checkend_pickup.php",
+				success: function(jsondata) {
+					if(jsondata.formUrl !== undefined) {
+						window.location = jsondata.formUrl;
+					} else {
+						alert('Не удалось сформировать платёжную ссылку, попробуйте еще раз');
+						$('.end_checkout_pickup').removeClass("pointer-event-none-element");
+					}
+				}
+			});
+
+			if (typeof ym !== "undefined" && ym !== null) {
+				ym(85932720,'reachGoal','order-create');
+			}
+		}
+	});
+
+	$('.button-order-sertificate').click(function() {
+			$('.button-order-sertificate').addClass("pointer-event-none-element");
+
+			$.ajax({
+				type: 'POST',
+				url: "/include/checkend_sertificate.php",
+				success: function(jsondata) {
+					window.location = "/thanks?norder="+jsondata.numberorder+"&variant=sertificate"
+				}
+			});
+	});
+
+	function updateDiliveryPriceInCart(data) {
+		/*data = data.replace("₽","");
+		data = data.replace(/ /g,"");
+		if(Number(data) >= 10000000) {
+			$('.delivery-price-check').text('Бесплатно');
+		} else {
+			$('.delivery-price-check').text('Не учтено');
+		}*/
+
+		if((Number(deliveryCostObj) == 0)||(deliveryCostObj == 'Не учтено')) {
+			$('.delivery-price-check').text('0');
+		} else {
+			$('.delivery-price-check').text((Number(deliveryCostObj)).toLocaleString('ru') + ' ₽');
+		}
+	}
+
+	// function getPriceGoodsInCart() {
+	// 	$.ajax({
+	// 		type: "POST",
+	// 		url: "/include/ajax_goods_get_info.php",
+	//
+	// 		success: function(data) {
+	// 			$('.summaallgoods').text(data);
+	//
+	// 			data = data.replace("₽","");
+	// 			data = data.replace(/ /g,"");
+	// 			updateDiliveryPriceInCart(data);
+	// 			sessionPriceGoodsCart = Number(data);
+	//
+	// 			if(deliveryCostObj != 'Не учтено') {
+	// 				$('.price-total-value').text((Number(data) + Number(deliveryCostObj) + Number(packagingCostObj)).toLocaleString('ru') + ' ₽');
+	// 			} else {
+	// 				$('.price-total-value').text((Number(data) + Number(packagingCostObj)).toLocaleString('ru') + ' ₽');
+	// 			}
+	// 		}
+	// 	});
+	// }
+
+	function getPriceGoodsInCart() {
+		$.ajax({
+			type: "POST",
+			url: "/include/ajax_goods_get_info.php",
+
+			success: function(data) {
+				data=JSON.parse(data);
+				if(Number(data['differenceSellValue']) > 0) {
+					$('.difference-sell-old-price').text((Number(data['summGoodsInCart']) + Number(data['differenceSellValue'])).toLocaleString('ru') + ' ₽');
+					$('.difference-sell-value__dawn_sell').text((Number(data['differenceSellValue'])).toLocaleString('ru') + ' ₽');
+					$('.difference-sell-new-price').text((Number(data['summGoodsInCart'])).toLocaleString('ru') + ' ₽');
+				} else {
+					$('.summaallgoods').text((Number(data['summGoodsInCart'])).toLocaleString('ru') + ' ₽');
+				}
+
+				$('.promocode-cart-value').text((Number(data['promocodeDiscount'])).toLocaleString('ru') + ' ₽');
+				sessionPriceGoodsCart = Number(data['summGoodsInCart']);
+
+				if(deliveryCostObj != 'Не учтено') {
+					$('.price-total-value').text((Number(data['summGoodsInCart']) - Number(data['promocodeDiscount']) + Number(deliveryCostObj) + Number(packagingCostObj)).toLocaleString('ru') + ' ₽');
+					$('.delivery-price-check').text(deliveryCostObj + ' ₽');
+				} else {
+					$('.price-total-value').text((Number(data['summGoodsInCart']) - Number(data['promocodeDiscount']) + Number(packagingCostObj)).toLocaleString('ru') + ' ₽');
+				}
+			}
+		});
+	}
+
+	function addGoodInCartScript(id_good, size_value, price, value, typeObject) {
+
+		if(typeObject == 'good') {
+			$.ajax({
+				type: "POST",
+				data: "value=" + value + "&key=" + id_good + "&size_value=" + size_value + "&price=" + price,
+				url: "/include/ajax_goods.php",
+				success: function() {
+					$('.wrap-delivery-variable__radio-box').removeClass("active");
+					getPriceGoodsInCart();
+				}
+			});
+		}
+
+		if(typeObject == 'sertificate') {
+			$.ajax({
+				type: "POST",
+				url: "/include/toAjax/on_sertificate.php",
+				success: function() {
+					getPriceGoodsInCart();
+				}
+			});
+		}
+	}
+
+	function deleteGoodInCart(id_good, size_value, price, value, typeObject) {
+
+		if(typeObject == 'good') {
+			$.ajax({
+				type: "POST",
+				data: "&key=" + id_good + "&size_value=" + size_value + "&price=" + price + "&value=" + value,
+				url: "/include/ajax_goods_delete.php",
+				success: function() {
+					$('.wrap-delivery-variable__radio-box').removeClass("active");
+					getPriceGoodsInCart();
+				}
+			});
+		}
+
+		if(typeObject == 'sertificate') {
+			$.ajax({
+				type: "POST",
+				url: "/include/toAjax/off_sertificate.php",
+				success: function() {
+					getPriceGoodsInCart();
+				}
+			});
+		}
+
+	}
+
+	function minusGoodInCart(id_good, size_value, price, value, typeObject) {
+		$.ajax({
+			type: "POST",
+			data: "&key=" + id_good + "&size_value=" + size_value + "&price=" + price + "&value=" + value,
+			url: "/include/ajax_goods_minus.php",
+			success: function() {
+				$('.wrap-delivery-variable__radio-box.active').click();
+				getPriceGoodsInCart();
+			}
+		});
+	}
+
+	$('body').on('click', '.remove-in-cart', function() {
+		console.log('работает');
+		var parentElement = $(this).parent().parent();
+		parentElement.detach();
+		deleteGoodInCart(parentElement.attr("idG"), parentElement.attr("sizeG"), parentElement.attr("priceG"), parentElement.attr("valueG"), 'good');
+		if($("div").is('.wrap-item-cart')) {} else {
+			$('.step-on-order-registration-button').hide();
+			// window.location.reload();
+		}
+		setTimeout(function(){
+			window.location.reload();
+		},200);
+	});
+
+	$('.back-goods').click(function() {
+
+		var parentElement = $(this).parent().parent().parent();
+
+		if($(this).hasClass("thistypesertificate")) {
+			addGoodInCartScript('', '', '', '', 'sertificate');
+		} else {
+			addGoodInCartScript(parentElement.attr("idG"), parentElement.attr("sizeG"), parentElement.attr("priceG"), parentElement.attr("valueG"), 'good');
+		}
+
+		$(this).addClass("disabled");
+		parentElement.find('.delete-good-in-cart').removeClass("disabled");
+		parentElement.find('.item-cart-img').removeClass("disabled");
+		parentElement.find('.item-cart-info').removeClass("disabled");
+		parentElement.find('.item-cart-wrap-plus-minus-element').removeClass("disabled");
+		parentElement.find('.delete-good-in-cart').removeClass("removeend");
+
+	});
+
+	function checkAvailabilityPlusMinus(count, limit, objectMinus, objectPlus)
+	{
+		console.log('Значение:' + count + '||' + 'Лимит:' + limit);
+		if(count == 1) {
+			objectMinus.addClass("inactive");
+		} else {
+			objectMinus.removeClass("inactive");
+		}
+
+		if(count == limit) {
+			objectPlus.addClass("inactive");
+		} else {
+			objectPlus.removeClass("inactive");
+		}
+	}
+
+	$('body').on('click', '.item-cart-plus-minus-element-minus', function () {
+		var parentElement = $(this).parent().parent().parent();
+		var jQueryinput = $(this).parent().find('.item-cart-plus-minus-element-value');
+		var count = Number(jQueryinput.text().replace(',', '.'));
+		var limit = Number(parentElement.attr("limit"));
+		if(count > 1) {
+			count = (count - 1).toFixed(0);
+			parentElement.attr("valueG", Number(parentElement.attr("valueG")) - 1);
+			minusGoodInCart(parentElement.attr("idG"), parentElement.attr("sizeG"), parentElement.attr("priceG"), 1, 'good');
+		}
+		/*count = count < 1 ? 1 : count;*/
+		jQueryinput.text(count);
+		jQueryinput.change();
+
+		objectPlus = $(this).parent().find('.item-cart-plus-minus-element-plus');
+		checkAvailabilityPlusMinus(count, limit, $(this), objectPlus);
+
+		return false;
+	});
+
+	$('body').on('click', '.item-cart-plus-minus-element-plus', function () {
+		var parentElement = $(this).parent().parent().parent();
+		var jQueryinput = $(this).parent().find('.item-cart-plus-minus-element-value');
+		var limit = Number(parentElement.attr("limit"));
+
+		var count = Number(jQueryinput.text().replace(',', '.'));
+		if(count < limit) {
+			count = (count + 1).toFixed(0);
+			parentElement.attr("valueG", Number(parentElement.attr("valueG")) + 1);
+			addGoodInCartScript(parentElement.attr("idG"), parentElement.attr("sizeG"), parentElement.attr("priceG"), 1, 'good');
+		}
+
+		jQueryinput.text(count);
+		jQueryinput.change();
+
+		objectMinus = $(this).parent().find('.item-cart-plus-minus-element-minus');
+		checkAvailabilityPlusMinus(count, limit, objectMinus, $(this));
+		return false;
+	});
+
+$('[trigger]').click(function() {
+	$('[trigger = ' + $(this).attr("trigger") + ']').removeClass("active");
+	var dataSection = $('.'+ $(this).attr("trigger-section")).attr("data-section");
+	$('[data-section = ' + dataSection + ']').removeClass("active");
+	$('.'+ $(this).attr("trigger-section")).addClass("active");
+	$(this).addClass("active");
+});
+
+$('[modal-selected]').click(function() {
+ 	var nameModal = $(this).attr("modal-selected");
+	var htmlModal = '<div class="create-modal">' + $('[modalName = ' + nameModal + ']').html() + '</div>';
+	$('[modalName = ' + nameModal + ']').addClass("active");
+	$('body').prepend(htmlModal);
+	$('body').addClass("blockscroll");
+	$('.wrap-modal-popup').addClass("active");
+});
+
+$('body').on('click', '.close-modal', function() {
+	$(this).parent().parent().parent().removeClass("active");
+	$('body').removeClass("blockscroll");
+	$('.create-modal').detach();
+});
+
+$('.select-selected-display').click(function() {
+	$(this).next('.select-selected-option-wrap').slideToggle(20);
+});
+
+$('.step-on-order-registration-button.next-step-in-cart').click(function() {
+	$('.step-one-cart-wrap').removeClass("active");
+	$(this).removeClass("active");
+	$("body,html").animate({scrollTop:0}, 0);
+	$('.step-two-cart-wrap').addClass("active");
+	$('.step-one').addClass("complete");
+	$('.step-two').addClass("active");
+});
+
+$('.step-one').click(function() {
+	$('.step-one-cart-wrap').addClass("active");
+	$("body,html").animate({scrollTop:0}, 0);
+	$('.step-two-cart-wrap').removeClass("active");
+	$('.step-one').removeClass("complete");
+	$('.step-two').removeClass("active");
+});
+
+$('.step-two').click(function() {
+	$('.step-one-cart-wrap').removeClass("active");
+	$("body,html").animate({scrollTop:0}, 0);
+	$('.step-two-cart-wrap').addClass("active");
+	$('.step-one').addClass("complete");
+	$('.step-two').addClass("active");
+});
+
+$(".cheackbox-packaging").click(function() {
+	$(".cheackbox-packaging").removeClass("active");
+	$(this).addClass("active");
+});
+
+$(".cheackbox-offer").click(function() {
+	$(this).toggleClass("active");
+});
+
+var StickyElement = function(node) {
+  if($("div").is(".sticky-content") == true) {
+  var doc = $(document),
+      fixed = false,
+      anchor = node.find('.sticky-anchor'),
+      content = node.find('.sticky-content');
+
+  var onScroll = function(e) {
+    var docTop = doc.scrollTop(),
+        anchorTop = anchor.offset().top;
+    if(docTop > anchorTop) {
+      if(!fixed) {
+        anchor.height(content.outerHeight());
+        content.addClass('fixed');
+        fixed = true;
+      }
+    } else {
+      if(fixed) {
+        anchor.height(0);
+        content.removeClass('fixed');
+        fixed = false;
+      }
+    }
+  };
+
+  $(window).on('scroll', onScroll);
+
+  }
+};
+
+var go_sticky = new StickyElement($('#sticky'));
