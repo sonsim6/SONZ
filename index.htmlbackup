@@ -16,6 +16,71 @@
       type="text/javascript"
       src="./Новинки_files/jquery.min.js.загружено"
     ></script>
+    <meta name="description" content="" />
+    <meta
+      name="facebook-domain-verification"
+      content="8a8pnxfz3zxs7jgpb31q6r9a1a3tgz"
+    />
+    <script type="text/javascript">
+      !(function () {
+        var t = document.createElement('script');
+        (t.type = 'text/javascript'),
+          (t.async = !0),
+          (t.src = 'https://vk.com/js/api/openapi.js?168'),
+          (t.onload = function () {
+            VK.Retargeting.Init('VK-RTRG-640468-9e2tq'), VK.Retargeting.Hit();
+          }),
+          document.head.appendChild(t);
+      })();
+    </script>
+    <script
+      type="text/javascript"
+      async=""
+      src="./Новинки_files/openapi.js.загружено"
+    ></script>
+    <noscript
+      ><img
+        src="https://vk.com/rtrg?p=VK-RTRG-640468-9e2tq"
+        style="position: fixed; left: -999px;"
+        alt=""
+    /></noscript>
+    <!-- Facebook Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(
+        window,
+        document,
+        'script',
+        'https://connect.facebook.net/en_US/fbevents.js'
+      );
+      fbq('init', '1241741552984540');
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        src="https://www.facebook.com/tr?id=1241741552984540&ev=PageView
+		&noscript=1"
+      />
+    </noscript>
+    <!-- End Facebook Pixel Code -->
     <title>SONZ</title>
     <link
       rel="shortcut icon"
@@ -23,6 +88,15 @@
       type="image/x-icon"
     />
     <meta name="description" content="Эксперимент Серафима Соннова" />
+    <script src="./Новинки_files/owl.carousel.min.js.загружено"></script>
+    <link rel="stylesheet" href="./Новинки_files/owl.carousel.min.css" />
+    <style type="text/css"></style>
+    <style>
+      [_nghost-ng-c4214649903] {
+        font-family: Open Sans, sans-serif;
+        color: #121212;
+      }
+    </style>
   </head>
 
   <body class="category-page">
@@ -74,6 +148,21 @@
           </svg>
         </div>
       </div>
+
+      <!-- <div class="navigation-open__cat">
+			<div class="navigation-open__cat_top">
+				<a href="https://rndm.store/new">Новинки</a>
+				<a href="https://rndm.store/outerwear">Верхняя одежда</a>
+				<a href="https://rndm.store/underwear">Нижняя одежда</a>
+				<a href="https://rndm.store/accessories">Аксессуары</a>
+				<a href="https://rndm.store/discounts">Скидки</a>
+				<a href="https://rndm.store/rndm-charity">RNDM X Настенька</a>
+				<a href="https://rndm.store/nude">Nude</a>
+			</div>
+			<div class="navigation-open__cat_top">
+				<a href="https://rndm.store/help">HELP</a>
+			</div>
+		</div> -->
     </div>
 
     <div class="header-top-fix">
@@ -89,11 +178,24 @@
       <span class="mini-cart" onclick="showMiniCart()">
         <div class="mobile-mini-cart">
           <img src="./Новинки_files/BASKET_WEB.svg" />
-          <span style="display: none !important;" class="mini-cart-value"
-            >0</span
-          >
+          <span class="mini-cart-value">0</span>
         </div>
       </span>
+      <!-- <div class="menu-top">
+			<a href="https://rndm.store/new" class="menu-top__item">Новинки</a>
+			<a href="https://rndm.store/outerwear" class="menu-top__item">Верхняя одежда</a>
+			<a href="https://rndm.store/underwear" class="menu-top__item">Нижняя одежда</a>
+			<a href="https://rndm.store/accessories" class="menu-top__item">Аксессуары</a>
+			<a href="https://rndm.store/discounts" class="menu-top__item">Скидки</a>
+			<a href="https://rndm.store/nude" class="menu-top__item">Nude</a>
+		</div> -->
+      <!-- <a href="https://rndm.store/rndm-charity" class="charity-nav">
+			<img src="./Новинки_files/nastenka-logo.svg">
+		</a>
+		<div class="change-version">
+			<div class="change-version__item" data-lang="en"><img src="./Новинки_files/ENG_WEB.svg"></div>
+			<div class="change-version__item active" data-lang="ru"><img src="./Новинки_files/RUS_WEB.svg"></div>
+		</div> -->
     </div>
     <style>
       .desc-main {
@@ -352,6 +454,18 @@
 
       <div id="footer" class="footer-site">
         <div class="footer-left">
+          <!-- <svg style="display:none;" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M6.50156 4.1001C4.60156 4.1001 3.10156 5.6001 3.10156 7.5001C3.10156 9.4001 4.60156 10.9001 6.50156 10.9001C8.40156 10.9001 9.90156 9.4001 9.90156 7.5001C9.90156 5.6001 8.40156 4.1001 6.50156 4.1001ZM6.50156 9.7001C5.30156 9.7001 4.30156 8.7001 4.30156 7.5001C4.30156 6.3001 5.30156 5.3001 6.50156 5.3001C7.70156 5.3001 8.70156 6.3001 8.70156 7.5001C8.70156 8.7001 7.70156 9.7001 6.50156 9.7001Z">
+					</path>
+					<path
+						d="M10.0016 3.1001C9.80156 3.1001 9.60156 3.2001 9.40156 3.3001C9.20156 3.5001 9.10156 3.7001 9.10156 3.9001C9.10156 4.1001 9.20156 4.3001 9.40156 4.5001C9.60156 4.7001 9.80156 4.8001 10.0016 4.8001C10.2016 4.8001 10.4016 4.7001 10.6016 4.5001C10.8016 4.3001 10.9016 4.1001 10.9016 3.9001C10.9016 3.7001 10.8016 3.5001 10.6016 3.3001C10.5016 3.2001 10.2016 3.1001 10.0016 3.1001Z">
+					</path>
+					<path
+						d="M9.4 0.899902H3.6C1.6 0.899902 0 2.4999 0 4.4999V10.3999C0 12.3999 1.6 13.9999 3.6 13.9999H9.5C11.5 13.9999 13.1 12.3999 13.1 10.3999V4.5999C13.1 2.5999 11.4 0.899902 9.4 0.899902ZM11.9 10.3999C11.9 11.7999 10.8 12.8999 9.4 12.8999H3.6C2.2 12.8999 1.1 11.7999 1.1 10.3999V4.5999C1.1 3.1999 2.2 2.0999 3.6 2.0999H9.5C10.9 2.0999 12 3.1999 12 4.5999V10.3999H11.9Z">
+					</path>
+				</svg> -->
+
           <a
             href="https://www.instagram.com/dim.icz/"
             target="_blank"
@@ -367,7 +481,19 @@
             ТЕХ.ПОДДЕРЖКА | ПРЕДЛОЖЕНИЯ
           </a>
         </div>
+        <!-- <div class="footer-right">
+				<a href="https://rndm.store/privacy" class="item-footer help-item-footer">
+					privacy policy
+				</a>
+				<a href="https://rndm.store/help" class="item-footer help-item-footer">
+					HELP
+				</a>
+			</div> -->
       </div>
+      <script
+        type="text/javascript"
+        src="./Новинки_files/cart.js.загружено"
+      ></script>
       <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -436,6 +562,47 @@
           });
         });
       </script>
+
+      <!-- Yandex.Metrika counter -->
+      <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+          m[i] =
+            m[i] ||
+            function () {
+              (m[i].a = m[i].a || []).push(arguments);
+            };
+          m[i].l = 1 * new Date();
+          (k = e.createElement(t)),
+            (a = e.getElementsByTagName(t)[0]),
+            (k.async = 1),
+            (k.src = r),
+            a.parentNode.insertBefore(k, a);
+        })(
+          window,
+          document,
+          'script',
+          'https://mc.yandex.ru/metrika/tag.js',
+          'ym'
+        );
+
+        ym(85932720, 'init', {
+          clickmap: true,
+          trackLinks: true,
+          accurateTrackBounce: true,
+          webvisor: true,
+          ecommerce: 'dataLayer'
+        });
+      </script>
+      <noscript>
+        <div>
+          <img
+            src="https://mc.yandex.ru/watch/85932720"
+            style="position: absolute; left: -9999px;"
+            alt=""
+          />
+        </div>
+      </noscript>
+      <!-- /Yandex.Metrika counter -->
     </div>
     <script>
       $('.change-sort').click(function () {
@@ -453,4 +620,17 @@
       });
     </script>
   </body>
+  <app-content ng-version="16.0.0"
+    ><template shadowrootmode="open"
+      ><!----><app-similar-tools _nghost-ng-c4214649903=""
+        ><!----><!----><!----></app-similar-tools
+      ><!----><!---->
+      <style>
+        [_nghost-ng-c4214649903] {
+          font-family: Open Sans, sans-serif;
+          color: #121212;
+        }
+      </style>
+    </template></app-content
+  >
 </html>
